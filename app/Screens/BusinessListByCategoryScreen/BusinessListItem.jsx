@@ -1,24 +1,31 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import Colors from '@/app/Utils/Colors'
 import Ionicons from '@expo/vector-icons/Ionicons'
+import { useNavigation } from '@react-navigation/native'
 
 const BusinessListItem = ({ business }) => {
+    const navigate = useNavigation();
     return (
-        <View style={styles.container}>
-            <Image source={{ uri: business.images[0].url }}
-                style={styles.image}
-            />
-            <View style={styles.subContainer}>
-                <Text style={{ fontFamily: 'Outfit-Regular', color: Colors.GRAY, fontSize: 15 }}>{business.contactPerson}</Text>
-                <Text style={{ fontFamily: 'Outfit-Bold', fontSize: 19 }}>{business.name}</Text>
-                <Text style={{ fontFamily: 'Outfit-Regular', color: Colors.GRAY, fontSize: 16 }}>
-                    <Ionicons name="location-sharp" size={20} color={Colors.PRIMARY} />
-                    {business.address}
-                </Text>
+        <TouchableOpacity onPress={() => navigate.push('business-detail', {
+            business: business
+        })}>
+            <View style={styles.container}>
+                <Image source={{ uri: business.images[0].url }}
+                    style={styles.image}
+                />
+                <View style={styles.subContainer}>
+                    <Text style={{ fontFamily: 'Outfit-Regular', color: Colors.GRAY, fontSize: 15 }}>{business.contactPerson}</Text>
+                    <Text style={{ fontFamily: 'Outfit-Bold', fontSize: 19 }}>{business.name}</Text>
+                    <Text style={{ fontFamily: 'Outfit-Regular', color: Colors.GRAY, fontSize: 16 }}>
+                        <Ionicons name="location-sharp" size={20} color={Colors.PRIMARY} />
+                        {business.address}
+                    </Text>
+
+                </View>
 
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 
