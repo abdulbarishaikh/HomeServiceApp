@@ -6,6 +6,8 @@ import Colors from '@/app/Utils/Colors';
 import Heading from '@/app/Components/Heading';
 import { TextInput } from 'react-native-gesture-handler';
 import GlobalApi from '@/app/Utils/GlobalApi';
+import { useUser } from '@clerk/clerk-expo';
+import { format } from 'date-fns'
 
 const BookingModal = ({ businessId, hideModal }) => {
     const [timeList, setTimeList] = useState([])
@@ -13,8 +15,9 @@ const BookingModal = ({ businessId, hideModal }) => {
     const [selectedDate, setSelectedDate] = useState()
     const [note, setNote] = useState()
     const onDateChange = (date) => {
-        setSelectedDate(date)
+        setSelectedDate(format(date,'yyyy-MM-dd'));
     }
+    const {user} = useUser();
     useEffect(() => {
         getTimeList();
     }, [])
@@ -45,15 +48,15 @@ const BookingModal = ({ businessId, hideModal }) => {
             ToastAndroid.show('Please Select Date And Time', ToastAndroid.LONG)
             return;
         }
-        console.log('done')
         const data = {
-            userName: 'abdul',
-            userEmail: 'abdul',
+            userName: user?.fullName,
+            userEmail: user?.primaryEmailAddress.emailAddress,
             time: selectedTime,
             date: selectedDate,
             // note:note,
             businessId: businessId
         }
+        console.log('data >>>>>> ',data)
         GlobalApi.createBooking(data).then((res) => {
             console.log('res >>>>>> ', res)
             if (res.createBooking) {
