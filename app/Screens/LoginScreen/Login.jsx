@@ -46,12 +46,10 @@ const Login = () => {
     const { user } = useUser();
     const { isSignedIn } = useAuth();
     const navigation = useNavigation();
-    console.log('user >>>>>> ',user)
     useEffect(()=>{
         if(isSignedIn){
             navigation.push('/home')
         }
-        console.log('isSignedIn >>>>>> ',isSignedIn)
     },[isSignedIn])
 
 

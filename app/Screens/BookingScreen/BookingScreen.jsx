@@ -15,7 +15,6 @@ const BookingScreen = () => {
   const getUserdBooking = () => {
     setIsLoading(true);
     GlobalApi.getUserdBooking(user.primaryEmailAddress.emailAddress).then(res => {
-      console.log('called')
       setBookings(res.bookings)
       setIsLoading(false)
     });

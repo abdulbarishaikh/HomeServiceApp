@@ -1,4 +1,5 @@
 import { gql, request } from 'graphql-request'
+import { ToastAndroid } from 'react-native';
 
 const MASTER_URL = 'https://ap-south-1.cdn.hygraph.com/content/cm4nn41lh00c007uv6zt0of68/master';
 
@@ -113,7 +114,7 @@ const publishedBooking = async (bookingId) => {
             }
         }
     `;
-    const result = await request(MASTER_URL, mutationQuery).catch((error) => console.log('error >>>>>>> ', error));
+    const result = await request(MASTER_URL, mutationQuery).catch((error) => ToastAndroid.show(error, ToastAndroid.LONG));
 
     return result;
 }
@@ -147,7 +148,20 @@ const getUserdBooking = async (userEmail) => {
             }
         }
     `;
-    const result = await request(MASTER_URL, query).catch((error) => console.log('error >>>>>>> ', error));
+    const result = await request(MASTER_URL, query).catch((error) => ToastAndroid.show(error, ToastAndroid.LONG));
+
+    return result;
+}
+const getBookedTimes = async (businessId) => {
+    const query = gql`
+        query GetUserBookings {
+            bookings(where: {business: {id: "${businessId}"}}) {
+                time
+                date
+            }
+        }
+    `;
+    const result = await request(MASTER_URL, query).catch((error) => ToastAndroid.show(error, ToastAndroid.LONG));
 
     return result;
 }
@@ -159,5 +173,6 @@ export default {
     getBusinessListByCategory,
     createBooking,
     publishedBooking,
-    getUserdBooking
+    getUserdBooking,
+    getBookedTimes
 }

@@ -10,17 +10,20 @@ import { useUser } from '@clerk/clerk-expo';
 import { format } from 'date-fns'
 
 const BookingModal = ({ businessId, hideModal }) => {
-    const [timeList, setTimeList] = useState([])
-    const [selectedTime, setSelectedTime] = useState()
-    const [selectedDate, setSelectedDate] = useState()
-    const [note, setNote] = useState()
+
+    const [timeList, setTimeList] = useState([]);
+    const [selectedTime, setSelectedTime] = useState();
+    const [selectedDate, setSelectedDate] = useState(format(new Date(), 'yyyy-MM-dd'));
+    const [note, setNote] = useState();
+    const [bookedTimes, setBookedTimes] = useState([]);
     const onDateChange = (date) => {
-        setSelectedDate(format(date,'yyyy-MM-dd'));
+        setSelectedDate(format(date, 'yyyy-MM-dd'));
     }
-    const {user} = useUser();
+    const { user } = useUser();
     useEffect(() => {
         getTimeList();
-    }, [])
+        getBookedTimes();
+    }, []);
 
     const getTimeList = () => {
         const timeListArr = [];
@@ -56,18 +59,17 @@ const BookingModal = ({ businessId, hideModal }) => {
             // note:note,
             businessId: businessId
         }
-        console.log('data >>>>>> ',data)
         GlobalApi.createBooking(data).then((res) => {
-            console.log('res >>>>>> ', res)
             if (res.createBooking) {
-                console.log('res >>>>>> ', res)
                 GlobalApi.publishedBooking(res.createBooking.id).then((res) => {
-                    console.log('published res >>>>>> ', res)
                 });
             }
             ToastAndroid.show('Booking Created Successfully', ToastAndroid.LONG)
             hideModal();
         });
+    }
+    const getBookedTimes = () => {
+        GlobalApi.getBookedTimes(businessId).then(res => setBookedTimes(res.bookings))
     }
     return (
         <ScrollView>
@@ -91,6 +93,7 @@ const BookingModal = ({ businessId, hideModal }) => {
                         }}
                         selectedDayColor={Colors.PRIMARY}
                         selectedDayTextColor={Colors.WHITE}
+                    // disabledDates=
                     />
 
                 </View>
@@ -102,10 +105,23 @@ const BookingModal = ({ businessId, hideModal }) => {
                         renderItem={({ item, index }) => (
                             <TouchableOpacity
                                 onPress={() => setSelectedTime(item.time)}
+                                disabled={bookedTimes.length > 0 && bookedTimes.some(({ time }) => time === item.time)}
+                                style={{ paddingHorizontal: 2 }}
                             >
-                                <Text style={[selectedTime == item.time ? styles.selectedTime : styles.unSelectedTime]}>
-                                    {item.time}
-                                </Text>
+                                {
+                                    bookedTimes.some(({ time, date }) => time === item.time && format(date, 'yyyy-MM-dd') == selectedDate) ?
+                                        <Text style={[styles.unSelectedTime, {
+                                            backgroundColor: Colors.SUCCESS_LIGHT,
+                                            color: Colors.SUCCESS,
+                                            borderColor: Colors.SUCCESS_LIGHT
+                                        }]}>
+                                            {'Booked'}
+                                        </Text>
+                                        :
+                                        <Text style={[selectedTime == item.time ? styles.selectedTime : styles.unSelectedTime]}>
+                                            {item.time}
+                                        </Text>
+                                }
                             </TouchableOpacity>
                         )}
                     />
