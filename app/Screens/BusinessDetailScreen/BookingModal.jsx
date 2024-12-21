@@ -1,17 +1,19 @@
-import { FlatList, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, KeyboardAvoidingView, ScrollView, StyleSheet, Text, ToastAndroid, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import CalendarPicker from "react-native-calendar-picker";
 import Colors from '@/app/Utils/Colors';
 import Heading from '@/app/Components/Heading';
 import { TextInput } from 'react-native-gesture-handler';
+import GlobalApi from '@/app/Utils/GlobalApi';
 
-const BookingModal = ({ hideModal }) => {
+const BookingModal = ({ businessId, hideModal }) => {
     const [timeList, setTimeList] = useState([])
     const [selectedTime, setSelectedTime] = useState()
+    const [selectedDate, setSelectedDate] = useState()
     const [note, setNote] = useState()
     const onDateChange = (date) => {
-        console.log('date', date);
+        setSelectedDate(date)
     }
     useEffect(() => {
         getTimeList();
@@ -37,6 +39,32 @@ const BookingModal = ({ hideModal }) => {
         }
         setTimeList(timeListArr);
 
+    }
+    const createNewBooking = () => {
+        if (!selectedTime || !selectedDate) {
+            ToastAndroid.show('Please Select Date And Time', ToastAndroid.LONG)
+            return;
+        }
+        console.log('done')
+        const data = {
+            userName: 'abdul',
+            userEmail: 'abdul',
+            time: selectedTime,
+            date: selectedDate,
+            // note:note,
+            businessId: businessId
+        }
+        GlobalApi.createBooking(data).then((res) => {
+            console.log('res >>>>>> ', res)
+            if (res.createBooking) {
+                console.log('res >>>>>> ', res)
+                GlobalApi.publishedBooking(res.createBooking.id).then((res) => {
+                    console.log('published res >>>>>> ', res)
+                });
+            }
+            ToastAndroid.show('Booking Created Successfully', ToastAndroid.LONG)
+            hideModal();
+        });
     }
     return (
         <ScrollView>
@@ -90,7 +118,7 @@ const BookingModal = ({ hideModal }) => {
                         onChange={(text) => setNote(text)}
                     />
                 </View>
-                <TouchableOpacity style={{ marginTop: 10 }}>
+                <TouchableOpacity style={{ marginTop: 10 }} onPress={createNewBooking}>
                     <Text style={styles.confirmBtn}>Confirm & Book</Text>
                 </TouchableOpacity>
             </KeyboardAvoidingView>

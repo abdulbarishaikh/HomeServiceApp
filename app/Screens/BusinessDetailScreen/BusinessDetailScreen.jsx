@@ -52,8 +52,8 @@ const BusinessDetailScreen = () => {
                     }}>Message</Text>
 
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.btn,{backgroundColor:Colors.PRIMARY}]}
-                    onPress={()=>setShowModal(true)}
+                <TouchableOpacity style={[styles.btn, { backgroundColor: Colors.PRIMARY }]}
+                    onPress={() => setShowModal(true)}
                 >
                     <Text style={{
                         textAlign: 'center',
@@ -68,9 +68,9 @@ const BusinessDetailScreen = () => {
                 animationType='slide'
                 visible={showModal}
             >
-                <BookingModal hideModal={()=>{
+                <BookingModal businessId={business.id} hideModal={() => {
                     setShowModal(false);
-                }}/>
+                }} />
             </Modal>
         </View>
     )
@@ -101,8 +101,8 @@ const styles = StyleSheet.create({
     btnContainer: {
         display: 'flex',
         flexDirection: 'row',
-        margin:8,
-        gap:8
+        margin: 8,
+        gap: 8
     },
     btn: {
         padding: 10,
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: Colors.PRIMARY,
         borderRadius: 99,
-        flex:1
+        flex: 1
 
     }
 })

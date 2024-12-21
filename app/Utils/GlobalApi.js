@@ -14,7 +14,7 @@ const getSlider = async () => {
             }
             }
         }
-    `
+    `;
     const result = await request(MASTER_URL, query)
     return result;
 }
@@ -29,7 +29,7 @@ const getCategory = async () => {
             }
         }
     }
-    `
+    `;
     const result = await request(MASTER_URL, query)
     return result;
 }
@@ -51,15 +51,15 @@ const getBusinessList = async () => {
                 }
             }
         }
-    `
+    `;
     const result = await request(MASTER_URL, query)
     return result;
 }
-const getBusinessListByCategory = async (category) => {    
+const getBusinessListByCategory = async (category) => {
 
     const query = gql`
         query GetBusinessList {
-            businessLists(where: {category: {name: "`+category+`"}}) {
+            businessLists(where: {category: {name: "`+ category + `"}}) {
                 id
                 name
                 email
@@ -74,8 +74,50 @@ const getBusinessListByCategory = async (category) => {
                 }
             }
         }
-    `
+    `;
     const result = await request(MASTER_URL, query)
+    return result;
+}
+const createBooking = async (data) => {
+    console.log('data >>>>>>> ', data);
+    const mutationQuery = gql`
+        mutation createBooking {
+            createBooking(
+                data: {
+                    bookingStatus: booked, 
+                    business: {
+                        connect: {
+                            id: "`+ data.businessId + `"
+                        }
+                    }, 
+                    date: "`+ data.date + `", 
+                    time: "`+ data.time + `", 
+                    userEmail: "`+ data.userEmail + `", 
+                    userName: "`+ data.userName + `"
+                }
+            ) {
+                id
+            }
+        }
+    `;
+    console.log('result >>>>>>> ');
+    const result = await request(MASTER_URL, mutationQuery)
+
+    return result;
+}
+const publishedBooking = async (bookingId) => {
+    console.log('bookingId >>>>>>> ', `{id: "` + bookingId + `"`);
+    const mutationQuery = gql`
+        mutation createBooking {
+            publishBooking(where: {id: "` + bookingId + `"}, to: PUBLISHED) {
+                id
+                stage
+                userName
+            }
+        }
+    `;
+    const result = await request(MASTER_URL, mutationQuery).catch((error) => console.log('error >>>>>>> ', error));
+
     return result;
 }
 
@@ -83,5 +125,7 @@ export default {
     getSlider,
     getCategory,
     getBusinessList,
-    getBusinessListByCategory
+    getBusinessListByCategory,
+    createBooking,
+    publishedBooking
 }

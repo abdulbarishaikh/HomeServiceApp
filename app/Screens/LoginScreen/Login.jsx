@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import * as WebBrowser from 'expo-web-browser'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Colors from './../../Utils/Colors'
 import { Link } from 'expo-router'
-import { useOAuth } from '@clerk/clerk-expo'
+import { useAuth, useOAuth, useUser } from '@clerk/clerk-expo'
 import * as Linking from 'expo-linking'
+import { useNavigation } from '@react-navigation/native'
 
 export const useWarmUpBrowser = () => {
     React.useEffect(() => {
@@ -24,22 +25,34 @@ const Login = () => {
     const { startOAuthFlow } = useOAuth({ strategy: 'oauth_google' })
     const onPress = React.useCallback(async () => {
         try {
-          const { createdSessionId, signIn, signUp, setActive } = await startOAuthFlow()
-    
-          // If sign in was successful, set the active session
-          if (createdSessionId) {
-            console.log('createdSessionId >>>>>>>>>>>>> ',createdSessionId)
-            setActive({ session: createdSessionId })
-          } else {
-            // Use signIn or signUp returned from startOAuthFlow
-            // for next steps, such as MFA
-          }
+            const { createdSessionId, signIn, signUp, setActive } = await startOAuthFlow({
+                redirectUrl: Linking.createURL('/home', { scheme: 'myapp' }),
+            })
+
+            // If sign in was successful, set the active session
+            if (createdSessionId) {
+                setActive({ session: createdSessionId })
+            } else {
+                // Use signIn or signUp returned from startOAuthFlow
+                // for next steps, such as MFA
+            }
         } catch (err) {
-          // See https://clerk.com/docs/custom-flows/error-handling
-          // for more info on error handling
-          console.error("OAuth Error",JSON.stringify(err, null, 2))
+            // See https://clerk.com/docs/custom-flows/error-handling
+            // for more info on error handling
+            console.error("OAuth Error", JSON.stringify(err, null, 2))
         }
-      }, [])
+    }, [])
+
+    const { user } = useUser();
+    const { isSignedIn } = useAuth();
+    const navigation = useNavigation();
+    console.log('user >>>>>> ',user)
+    useEffect(()=>{
+        if(isSignedIn){
+            navigation.push('/home')
+        }
+        console.log('isSignedIn >>>>>> ',isSignedIn)
+    },[isSignedIn])
 
 
     return (

@@ -6,7 +6,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 const Header = () => {
     const { user, isLoading } = useUser();
-    const image = user?.imageUrl ? { uri: user?.imageUrl } : require('./../../../assets/user-default-img.png')
+    const image = user?.imageUrl ? { uri: user?.imageUrl } : require('@/assets/user-default-img.png')
     return (
         <View style={styles.container}>
             {/* Profile Section */}

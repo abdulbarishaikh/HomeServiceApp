@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './../Screens/HomeScreen/HomeScreen'
 import BusinessListByCategoryScreen from '../Screens/BusinessListByCategoryScreen/BusinessListByCategoryScreen';
 import BusinessDetailScreen from '../Screens/BusinessDetailScreen/BusinessDetailScreen';
+import { useAuth } from '@clerk/clerk-expo';
 
 
 const Stack = createStackNavigator();
