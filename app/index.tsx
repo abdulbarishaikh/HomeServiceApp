@@ -8,7 +8,7 @@ const StartPage = () => {
     'Outfit-Medium': require('./../assets/fonts/Outfit-Medium.ttf'),
   });
   // @ts-ignore
-  return <Redirect href="/(auth)/login" />;
+  return <Redirect href="/(public)/login" />;
 };
 
 export default StartPage;

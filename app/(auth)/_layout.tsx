@@ -1,4 +1,4 @@
-import { Tabs } from 'expo-router';
+import { Redirect, Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Pressable } from 'react-native';
 import { useAuth } from '@clerk/clerk-expo';
@@ -20,6 +20,10 @@ export const LogoutButton = () => {
 
 const TabsPage = () => {
 	const { isSignedIn } = useAuth();
+
+	if(!isSignedIn){
+		return <Redirect href="/(public)/login" />;
+	}
 
 	return (
 		<TabNavigation/>

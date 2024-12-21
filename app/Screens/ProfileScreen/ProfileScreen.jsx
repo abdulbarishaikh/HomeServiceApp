@@ -24,7 +24,11 @@ const ProfileScreen = () => {
     {
       id: 3,
       name: 'Logout',
-      icon: 'log-out'
+      icon: 'log-out',
+      onPress: () => {
+        doLogout();
+
+      }
     },
   ];
   const { signOut } = useAuth();
@@ -35,7 +39,7 @@ const ProfileScreen = () => {
   return (
     <View>
       <View style={{ padding: 20, paddingTop: 30, backgroundColor: Colors.PRIMARY }}>
-        <Text style={{ fontSize: 30, fontFamily: 'Outfit-Bold',color:Colors.WHITE }}>Profile</Text>
+        <Text style={{ fontSize: 30, fontFamily: 'Outfit-Bold', color: Colors.WHITE }}>Profile</Text>
         <View style={{
           display: 'flex',
           justifyContent: 'center',
@@ -52,16 +56,19 @@ const ProfileScreen = () => {
         <Text style={[PRIMARY_BTN]}>Logout</Text>
       </Pressable> */}
       </View>
-      <View style={{paddingTop:60}}>
+      <View style={{ paddingTop: 60 }}>
         <FlatList
           data={profileMenu}
-          renderItem={({item,index})=>(
-            <TouchableOpacity style={{display:'flex',flexDirection:'row',alignItems:'center',gap:10,marginBottom:40,
-              paddingHorizontal:80,
-              paddingTop:10
-            }}>
+          renderItem={({ item, index }) => (
+            <TouchableOpacity style={{
+              display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 40,
+              paddingHorizontal: 80,
+              paddingTop: 10
+            }}
+              onPress={() => item.hasOwnProperty('onPress') ? item?.onPress() : () => { }}
+            >
               <Ionicons name={item.icon} size={35} color={Colors.PRIMARY} />
-              <Text style={{ fontFamily:'Outfit-Regular',fontSize:20,}}>{item.name}</Text>
+              <Text style={{ fontFamily: 'Outfit-Regular', fontSize: 20, }}>{item.name}</Text>
 
             </TouchableOpacity>
           )}
