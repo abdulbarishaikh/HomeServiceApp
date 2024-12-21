@@ -1,10 +1,16 @@
 const Colors = {
     BLACK: '#000000',
     PRIMARY: '#8E3FFF',
-    WHITE: '#FFFFFF',
-    LIGHT_GRAY: '#EDEDED',
     PRIMARY_LIGHT: '#F1DEFF',
+    SUCCESS: '#5bc26e',
+    SUCCESS_LIGHT: '#aeedbd',
+    WHITE: '#FFFFFF',
     GRAY: '#7F7F7F',
+    LIGHT_GRAY: '#EDEDED',
+    DANGER: '#b62a2f',
+    DANGER_LIGHT: '#fab1b6',
+    WARNING: '#e8a215',
+    WARNING_LIGHT: '#e8a21570',
 
 };
 export default Colors;

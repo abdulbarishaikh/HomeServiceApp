@@ -79,7 +79,6 @@ const getBusinessListByCategory = async (category) => {
     return result;
 }
 const createBooking = async (data) => {
-    console.log('data >>>>>>> ', data);
     const mutationQuery = gql`
         mutation createBooking {
             createBooking(
@@ -100,13 +99,11 @@ const createBooking = async (data) => {
             }
         }
     `;
-    console.log('result >>>>>>> ');
     const result = await request(MASTER_URL, mutationQuery)
 
     return result;
 }
 const publishedBooking = async (bookingId) => {
-    console.log('bookingId >>>>>>> ', `{id: "` + bookingId + `"`);
     const mutationQuery = gql`
         mutation createBooking {
             publishBooking(where: {id: "` + bookingId + `"}, to: PUBLISHED) {
@@ -120,6 +117,40 @@ const publishedBooking = async (bookingId) => {
 
     return result;
 }
+const getUserdBooking = async (userEmail) => {
+    const query = gql`
+        query GetUserBookings {
+            bookings(
+                orderBy: updatedAt_DESC
+                where: {userEmail: "${userEmail}"}
+            ) {
+                time
+                userEmail
+                userName
+                bookingStatus
+                date
+                id
+                business {
+                    id
+                    images {
+                        url
+                    }
+                    name
+                    address
+                    contactPerson
+                    email
+                    about
+                    category {
+                        name
+                    }
+                }
+            }
+        }
+    `;
+    const result = await request(MASTER_URL, query).catch((error) => console.log('error >>>>>>> ', error));
+
+    return result;
+}
 
 export default {
     getSlider,
@@ -127,5 +158,6 @@ export default {
     getBusinessList,
     getBusinessListByCategory,
     createBooking,
-    publishedBooking
+    publishedBooking,
+    getUserdBooking
 }

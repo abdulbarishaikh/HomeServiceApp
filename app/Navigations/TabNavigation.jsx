@@ -2,6 +2,7 @@ import { View, Text } from 'react-native'
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeNavigation from '../Navigations/HomeNavigation';
+import BookingNavigation from '../Navigations/BookingNavigation';
 import ProfileScreen from '../Screens/ProfileScreen/ProfileScreen';
 import BookingScreen from '../Screens/BookingScreen/BookingScreen';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
@@ -25,7 +26,7 @@ const TabNavigation = () => {
                     }
                 }}
             />
-            <Tab.Screen name="Booking" component={BookingScreen}
+            <Tab.Screen name="Booking" component={BookingNavigation}
                 options={{
                     tabBarLabel: ({ color }) => {
                         return <Text style={{ color: color, fontSize: 12, marginTop: -5 }}>Booking</Text>
